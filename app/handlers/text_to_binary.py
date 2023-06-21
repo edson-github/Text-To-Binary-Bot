@@ -18,28 +18,24 @@ def text_binary(text):
     line = binary = ''
     text = text.encode('utf-8')
     j, m = divmod(len(text), 16)
-    generator = []
-    for i in range(j):
-        generator.append(text[i * 16:(i + 1) * 16])
+    generator = [text[i * 16:(i + 1) * 16] for i in range(j)]
     if m:
         generator.append(text[j * 16:])
     #
-    for add_r, d in enumerate(generator):
+    for d in generator:
         hex_str = binascii.hexlify(d)
         hex_str = hex_str.decode('ascii')
         j, m = divmod(len(hex_str.upper()), 2)
-        generator = []
-        for i in range(j):
-            generator.append(hex_str.upper()[i * 2:(i + 1) * 2])
+        generator = [hex_str.upper()[i * 2:(i + 1) * 2] for i in range(j)]
         dump_str = ' '.join(generator)
         line += dump_str[:8 * 3]
         if len(d) > 8:
-            line += ' ' + dump_str[8 * 3:]
+            line += f' {dump_str[8 * 3:]}'
         line += ' '
     hex_list = [t for t in line.split(' ') if t != '']
     for h in hex_list:
-        binary += bin(int(h, 16))[2::] + ' '
-    return binary[0:-1]
+        binary += f'{bin(int(h, 16))[2:]} '
+    return binary[:-1]
 
 
 async def cmd_text_to_binary(message: types.Message):

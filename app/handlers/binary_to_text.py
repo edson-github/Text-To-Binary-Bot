@@ -13,12 +13,13 @@ class BinaryToText(StatesGroup):
 
 
 def binary_text(binary):
-    hex_ = ''
     binary = binary.split(' ')
-    for x in binary:
-        hex_ += '0' * (2 - len(hex(int(x, 2))[2::])) + hex(int(x, 2))[2::] + ' '
+    hex_ = ''.join(
+        '0' * (2 - len(hex(int(x, 2))[2::])) + hex(int(x, 2))[2::] + ' '
+        for x in binary
+    )
     result = bytes()
-    text = hex_[0:-1].strip()
+    text = hex_[:-1].strip()
     for line in text.split('\n'):
         try:
             result += bytes.fromhex(line)
